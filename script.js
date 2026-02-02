@@ -129,7 +129,8 @@ const handleScroll = () => {
                 
                 if (scrolled < heroHeight) {
                     hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-                    hero.style.opacity = `${1 - scrolled / heroHeight}`;
+                    // Fade faster by multiplying the scroll factor (2.5x faster fade)
+                    hero.style.opacity = `${Math.max(0, 1 - (scrolled / heroHeight) * 2.5)}`;
                 }
             }
             

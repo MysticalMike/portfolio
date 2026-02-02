@@ -147,6 +147,20 @@ a:hover {
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--color-text);
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform var(--transition-fast);
+}
+
+.nav-logo-img:hover {
+    transform: scale(1.1);
 }
 
 .nav-menu {
@@ -349,7 +363,7 @@ a:hover {
     border: 1px solid var(--color-border);
     border-radius: 12px;
     padding: var(--spacing-md);
-    transition: all var(--transition-base);
+    transition: transform var(--transition-base), box-shadow var(--transition-base), border-color 0.2s ease;
 }
 
 .project-card:hover {
