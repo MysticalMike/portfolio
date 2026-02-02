@@ -24,6 +24,14 @@ if (navToggle && navMenu) {
             navMenu.classList.remove('active');
         }
     });
+    
+    // Add keyboard navigation support
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            navToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+        }
+    });
 }
 
 // Smooth scrolling for anchor links (enhanced)
@@ -45,30 +53,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 top: targetPosition,
                 behavior: 'smooth'
             });
-        }
-    });
-});
-
-// Add active state to nav links on scroll
-window.addEventListener('scroll', () => {
-    const sections = document.querySelectorAll('section[id]');
-    const navHeight = document.querySelector('.nav').offsetHeight;
-    
-    let current = '';
-    
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop - navHeight - 100;
-        const sectionHeight = section.offsetHeight;
-        
-        if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
-            current = section.getAttribute('id');
-        }
-    });
-    
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${current}`) {
-            link.classList.add('active');
         }
     });
 });
@@ -107,36 +91,53 @@ const updateYear = () => {
 
 updateYear();
 
-// Add subtle parallax effect to hero section
-window.addEventListener('scroll', () => {
-    const hero = document.querySelector('.hero');
-    if (hero) {
-        const scrolled = window.scrollY;
-        const heroHeight = hero.offsetHeight;
-        
-        if (scrolled < heroHeight) {
-            hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-            hero.style.opacity = `${1 - scrolled / heroHeight}`;
-        }
-    }
-});
-
-// Add keyboard navigation support
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        navToggle.classList.remove('active');
-        navMenu.classList.remove('active');
-    }
-});
-
-// Performance: Debounce scroll events
+// Consolidated scroll handler with performance optimization
 let scrollTimeout;
-window.addEventListener('scroll', () => {
-    if (scrollTimeout) {
-        window.cancelAnimationFrame(scrollTimeout);
+let ticking = false;
+
+const handleScroll = () => {
+    if (!ticking) {
+        window.requestAnimationFrame(() => {
+            // Active state for nav links
+            const sections = document.querySelectorAll('section[id]');
+            const navElement = document.querySelector('.nav');
+            const navHeight = navElement ? navElement.offsetHeight : 70;
+            
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - navHeight - 100;
+                const sectionHeight = section.offsetHeight;
+                
+                if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Parallax effect for hero section
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                const scrolled = window.scrollY;
+                const heroHeight = hero.offsetHeight;
+                
+                if (scrolled < heroHeight) {
+                    hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+                    hero.style.opacity = `${1 - scrolled / heroHeight}`;
+                }
+            }
+            
+            ticking = false;
+        });
+        
+        ticking = true;
     }
-    
-    scrollTimeout = window.requestAnimationFrame(() => {
-        // Additional scroll-based interactions can be added here
-    });
-});
+};
+
+window.addEventListener('scroll', handleScroll, { passive: true });
