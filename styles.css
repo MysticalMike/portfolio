@@ -301,8 +301,9 @@ a:hover {
     color: inherit;
 }
 
-.project-link-wrapper:hover {
-    opacity: 1;
+.project-link-wrapper:focus {
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
 }
 
 .project-card:hover {
