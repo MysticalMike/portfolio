@@ -299,6 +299,7 @@ a:hover {
     display: block;
     text-decoration: none;
     color: inherit;
+    cursor: pointer;
 }
 
 .project-link-wrapper:focus {
