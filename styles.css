@@ -197,6 +197,7 @@ a:hover {
     height: 2px;
     background-color: var(--color-text);
     position: absolute;
+    left: 0;
     transition: transform var(--transition-base);
 }
 
